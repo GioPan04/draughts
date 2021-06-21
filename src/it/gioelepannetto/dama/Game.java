@@ -7,34 +7,37 @@ public class Game {
     private static final int PLAYERS = 12;
     private static final int SIZE = 8;
 
-    private List<Man> white;
-    private List<Man> black;
+    private List<Man> men;
 
-    public Game(List<Man> white, List<Man> black) {
-        this.white = white;
-        this.black = black;
+    public Game(List<Man> men) {
+        this.men = men;
     }
 
-    private Team getTeamAtPosition(Man.Position position) {
-        for(Man man: white) {
+    private Team getTeamAtPosition(Position position) {
+        for(Man man: men) {
             if(man.position.equals(position)) {
-                System.out.printf("W: X: %d Y: %d %n", man.position.x, man.position.y);
-                return Team.white;
-            }
-        }
-
-        for(Man man: black) {
-            if(man.position.equals(position)) {
-                System.out.printf("B: X: %d Y: %d %n", man.position.x, man.position.y);
-                return Team.black;
+                return man.team;
             }
         }
 
         return null;
     }
 
-    public void move() {
+    private Man getMan(Position pos) {
+        for(Man man: men) {
+            if(man.position.equals(pos)) return man;
+        }
 
+        return null;
+    }
+
+    public void move(final Position from, final Position to) {
+        final Man man = getMan(from);
+
+        if(man == null) return;
+        if(getMan(to) != null) return;
+
+        man.position = to;
     }
 
     @Override
@@ -44,7 +47,7 @@ public class Game {
         for(int y = 0; y < SIZE; y++) {
             stringBuilder.append("|");
             for(int x = 0; x < SIZE; x++) {
-                final Team foundTeam = getTeamAtPosition(new Man.Position(x, y));
+                final Team foundTeam = getTeamAtPosition(new Position(x, y));
                 if(foundTeam != null) {
                     stringBuilder.append(foundTeam == Team.white ? "W" : "B");
                 } else {
@@ -59,47 +62,42 @@ public class Game {
     }
 
     static Game startNew() {
-        List<Man> black = new ArrayList<>();
-        List<Man> white = new ArrayList<>();
+        List<Man> men = new ArrayList<>();
 
         for(int i = 0; i < PLAYERS; i++) {
             if(i % 2 == 0) {
-                final Man.Position position1 = new Man.Position(i, 0);
-                final Man man1 = new Man(position1, Man.Type.man);
+                final Position position1 = new Position(i, 0);
+                final Man man1 = new Man(Team.black, position1, Man.Type.man);
 
-                final Man.Position position2 = new Man.Position(i, 2);
-                final Man man2 = new Man(position2, Man.Type.man);
+                final Position position2 = new Position(i, 2);
+                final Man man2 = new Man(Team.black, position2, Man.Type.man);
 
-                black.add(man1);
-                black.add(man2);
+                men.add(man1);
+                men.add(man2);
             } else {
-                final Man.Position position = new Man.Position(i, 1);
-                final Man man = new Man(position, Man.Type.man);
+                final Position position = new Position(i, 1);
+                final Man man = new Man(Team.black, position, Man.Type.man);
 
-                black.add(man);
+                men.add(man);
             }
 
             if(i % 2 == 0) {
-                final Man.Position position = new Man.Position(i, SIZE - 2);
-                final Man man = new Man(position, Man.Type.man);
+                final Position position = new Position(i, SIZE - 2);
+                final Man man = new Man(Team.white, position, Man.Type.man);
 
-                white.add(man);
+                men.add(man);
             } else {
-                final Man.Position position1 = new Man.Position(i, SIZE - 1);
-                final Man man1 = new Man(position1, Man.Type.man);
+                final Position position1 = new Position(i, SIZE - 1);
+                final Man man1 = new Man(Team.white, position1, Man.Type.man);
 
-                final Man.Position position2 = new Man.Position(i, SIZE - 3);
-                final Man man2 = new Man(position2, Man.Type.man);
+                final Position position2 = new Position(i, SIZE - 3);
+                final Man man2 = new Man(Team.white, position2, Man.Type.man);
 
-                white.add(man1);
-                white.add(man2);
+                men.add(man1);
+                men.add(man2);
             }
         }
 
-        return new Game(white, black);
-    }
-
-    public enum Team {
-        white, black
+        return new Game(men);
     }
 }
