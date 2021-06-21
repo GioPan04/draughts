@@ -12,6 +12,7 @@ public class Main {
 
         while (!game.won()) {
             System.out.println(game);
+            System.out.printf("Plays %s team %n", game.getTurn());
 
             System.out.println("Position you want to move from:");
             final Position from = getPosFromUser(scanner);

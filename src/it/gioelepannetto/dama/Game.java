@@ -11,13 +11,19 @@ public class Game {
 
     private List<Man> men;
     private Team winner;
+    private Team turn;
 
     public Game(List<Man> men) {
         this.men = men;
+        this.turn = Team.white;
     }
 
     public boolean won() {
         return winner != null;
+    }
+
+    public Team getTurn() {
+        return turn;
     }
 
     private Team getTeamAtPosition(Position position) {
@@ -45,6 +51,8 @@ public class Game {
 
         if(from == to) throw new SamePosition();
 
+        if(man.team != turn) throw new NotGamingTeam();
+
         // Can't move if there is someone at that position
         if(getMan(to) != null) throw new PlayerAlreadyPresent();
 
@@ -52,7 +60,7 @@ public class Game {
         final double distance = Math.sqrt(Math.pow(from.x - to.x, 2) + Math.pow(from.y - to.y, 2));
         if(distance > 1) throw new TooLongDistance();
 
-
+        turn = turn == Team.white ? Team.black : Team.white;
         man.position = to;
     }
 
