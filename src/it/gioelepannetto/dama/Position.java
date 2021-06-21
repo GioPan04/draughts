@@ -19,6 +19,10 @@ public class Position {
         return Math.sqrt(Math.pow(this.x - other.x, 2) + Math.pow(this.y - other.y, 2));
     }
 
+    public Position middle(final Position other) {
+        return new Position((this.x + other.x) / 2, (this.y + other.y) / 2);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

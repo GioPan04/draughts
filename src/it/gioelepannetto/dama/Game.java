@@ -71,7 +71,16 @@ public class Game {
         if(getMan(to) != null) throw new PlayerAlreadyPresent();
 
         // Can't move if distance is more than 1
-        if(from.distance(to) > 2) throw new TooLongDistance();
+        final double distance = from.distance(to);
+        if((int) distance == 2) {
+            final Position middlePos = to.middle(from);
+            final Man middleMan = getMan(middlePos);
+            if(middleMan != null) {
+                men.remove(middleMan);
+            } else {
+                throw new TooLongDistance();
+            }
+        } else if(distance > 2) throw new TooLongDistance();
 
         // Check the angle between the points and allow only diagonal moves
         final double angle = from.angle(to) / 90;

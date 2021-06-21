@@ -13,7 +13,7 @@ public class Main {
         try {
             game.move(new Position(1,5), new Position(2, 4));
             game.move(new Position(0,2), new Position(1, 3));
-            game.move(new Position(2,4), new Position(1, 5));
+            game.move(new Position(2,4), new Position(0, 2));
         } catch (GameError e) {
             System.out.println(e.detail);
         }
