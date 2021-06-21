@@ -57,11 +57,14 @@ public class Game {
     public void move(final Position from, final Position to) throws GameError {
         if(this.winner != null) return;
 
+        // Check if in the selected point there is a player
         final Man man = getMan(from);
         if(man == null) throw new NoPlayerFound(from);
 
+        // You can't stay in position
         if(from == to) throw new SamePosition();
 
+        // Check if the player wants to move non currently playing team
         if(man.team != turn) throw new NotGamingTeam();
 
         // Can't move if there is someone at that position
@@ -70,9 +73,13 @@ public class Game {
         // Can't move if distance is more than 1
         if(from.distance(to) > 2) throw new TooLongDistance();
 
+        // Check the angle between the points and allow only diagonal moves
         final double angle = from.angle(to) / 90;
         if(angle % 1 == 0) throw new OnlyDiagonalMoves();
 
+        // White men can only go up (increasing y)
+        // Black men can only go down (decreasing y)
+        // White and black kings can go up and down
         if(man.type == Man.Type.man) {
             if(man.team == Team.white) {
                 if(angle < 0) throw new OnlyForward();
@@ -81,10 +88,11 @@ public class Game {
             }
         }
 
-
+        // Update the turn and the current player position
         turn = turn == Team.white ? Team.black : Team.white;
         man.position = to;
 
+        // Became a king only if the man touched the up (whites) or down (black) edge
         if(man.type == Man.Type.man) {
             if(man.team == Team.black) {
                 if(to.y == SIZE - 1) man.type = Man.Type.king;
@@ -93,7 +101,7 @@ public class Game {
             }
         }
 
-
+        // Set a winner if there is one
         final Team winner = checkWinner();
         if(winner != null) this.winner = winner;
     }
