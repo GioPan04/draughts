@@ -35,7 +35,13 @@ public class Game {
         final Man man = getMan(from);
 
         if(man == null) return;
+        // Can't move if there is someone at that position
         if(getMan(to) != null) return;
+
+        // Can't move if distance is more than 1
+        final double distance = Math.sqrt(Math.pow(from.x - to.x, 2) + Math.pow(from.y - to.y, 2));
+        if(distance > 1) return;
+
 
         man.position = to;
     }

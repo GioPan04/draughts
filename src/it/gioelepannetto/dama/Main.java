@@ -6,7 +6,7 @@ public class Main {
         Game game = Game.startNew();
         System.out.println(game);
 
-        game.move(new Position(1, 5), new Position(0, 0));
+        game.move(new Position(1, 5), new Position(1, 2));
         System.out.println(game);
     }
 }
