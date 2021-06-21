@@ -10,6 +10,14 @@ public class Main {
         final Scanner scanner = new Scanner(System.in);
         Game game = Game.startNew();
 
+        try {
+            game.move(new Position(1,5), new Position(2, 4));
+            game.move(new Position(0,2), new Position(1, 3));
+            game.move(new Position(2,4), new Position(1, 5));
+        } catch (GameError e) {
+            System.out.println(e.detail);
+        }
+
         while (!game.won()) {
             System.out.println(game);
             System.out.printf("Plays %s team %n", game.getTurn());

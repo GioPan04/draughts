@@ -58,7 +58,19 @@ public class Game {
 
         // Can't move if distance is more than 1
         final double distance = Math.sqrt(Math.pow(from.x - to.x, 2) + Math.pow(from.y - to.y, 2));
-        if(distance > 1) throw new TooLongDistance();
+        if(distance > 2) throw new TooLongDistance();
+
+        final double angle = Math.toDegrees(Math.atan2(from.y - to.y, from.x - to.x)) / 90;
+        if(angle % 1 == 0) throw new OnlyDiagonalMoves();
+
+        if(man.type == Man.Type.man) {
+            if(man.team == Team.white) {
+                if(angle < 0) throw new OnlyForward();
+            } else {
+                if(angle > 0) throw new OnlyForward();
+            }
+        }
+
 
         turn = turn == Team.white ? Team.black : Team.white;
         man.position = to;
