@@ -85,6 +85,15 @@ public class Game {
         turn = turn == Team.white ? Team.black : Team.white;
         man.position = to;
 
+        if(man.type == Man.Type.man) {
+            if(man.team == Team.black) {
+                if(to.y == SIZE - 1) man.type = Man.Type.king;
+            } else {
+                if(to.y == 0) man.type = Man.Type.king;
+            }
+        }
+
+
         final Team winner = checkWinner();
         if(winner != null) this.winner = winner;
     }
