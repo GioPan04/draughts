@@ -26,6 +26,10 @@ public class Game {
         return turn;
     }
 
+    public Team winner() {
+        return winner;
+    }
+
     private Team getTeamAtPosition(Position position) {
         for(Man man: men) {
             if(man.position.equals(position)) {
@@ -44,9 +48,16 @@ public class Game {
         return null;
     }
 
-    public void move(final Position from, final Position to) throws GameError {
-        final Man man = getMan(from);
+    private Team checkWinner() {
+        if(men.stream().noneMatch(m -> m.team == Team.white)) return Team.black;
+        if(men.stream().noneMatch(m -> m.team == Team.black)) return Team.white;
+        return null;
+    }
 
+    public void move(final Position from, final Position to) throws GameError {
+        if(this.winner != null) return;
+
+        final Man man = getMan(from);
         if(man == null) throw new NoPlayerFound(from);
 
         if(from == to) throw new SamePosition();
@@ -57,10 +68,9 @@ public class Game {
         if(getMan(to) != null) throw new PlayerAlreadyPresent();
 
         // Can't move if distance is more than 1
-        final double distance = Math.sqrt(Math.pow(from.x - to.x, 2) + Math.pow(from.y - to.y, 2));
-        if(distance > 2) throw new TooLongDistance();
+        if(from.distance(to) > 2) throw new TooLongDistance();
 
-        final double angle = Math.toDegrees(Math.atan2(from.y - to.y, from.x - to.x)) / 90;
+        final double angle = from.angle(to) / 90;
         if(angle % 1 == 0) throw new OnlyDiagonalMoves();
 
         if(man.type == Man.Type.man) {
@@ -74,6 +84,9 @@ public class Game {
 
         turn = turn == Team.white ? Team.black : Team.white;
         man.position = to;
+
+        final Team winner = checkWinner();
+        if(winner != null) this.winner = winner;
     }
 
     @Override

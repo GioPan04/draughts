@@ -11,6 +11,14 @@ public class Position {
         this.y = y;
     }
 
+    public double angle(final Position other) {
+        return Math.toDegrees(Math.atan2(this.y - other.y, this.x - other.x));
+    }
+
+    public double distance(final Position other) {
+        return Math.sqrt(Math.pow(this.x - other.x, 2) + Math.pow(this.y - other.y, 2));
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

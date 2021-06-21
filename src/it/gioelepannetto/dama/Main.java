@@ -35,6 +35,8 @@ public class Main {
 
         }
 
+        System.out.printf("%s team won!", game.winner());
+
         scanner.close();
 
     }
