@@ -8,9 +8,14 @@ public class Game {
     private static final int SIZE = 8;
 
     private List<Man> men;
+    private Team winner;
 
     public Game(List<Man> men) {
         this.men = men;
+    }
+
+    public boolean won() {
+        return winner != null;
     }
 
     private Team getTeamAtPosition(Position position) {
