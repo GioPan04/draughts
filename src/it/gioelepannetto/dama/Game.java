@@ -30,16 +30,6 @@ public class Game {
         return winner;
     }
 
-    private Team getTeamAtPosition(Position position) {
-        for(Man man: men) {
-            if(man.position.equals(position)) {
-                return man.team;
-            }
-        }
-
-        return null;
-    }
-
     private Man getMan(Position pos) {
         for(Man man: men) {
             if(man.position.equals(pos)) return man;
@@ -122,9 +112,14 @@ public class Game {
         for(int y = 0; y < SIZE; y++) {
             stringBuilder.append("|");
             for(int x = 0; x < SIZE; x++) {
-                final Team foundTeam = getTeamAtPosition(new Position(x, y));
-                if(foundTeam != null) {
-                    stringBuilder.append(foundTeam == Team.white ? "W" : "B");
+                final Man foundMan = getMan(new Position(x, y));
+                if(foundMan != null) {
+                    final Team foundTeam = foundMan.team;
+                    if (foundMan.type == Man.Type.man) {
+                        stringBuilder.append(foundTeam == Team.white ? "w" : "b");
+                    } else {
+                        stringBuilder.append(foundTeam == Team.white ? "W" : "B");
+                    }
                 } else {
                     stringBuilder.append(" ");
                 }
