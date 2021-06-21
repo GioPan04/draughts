@@ -66,6 +66,9 @@ public class Game {
             final Position middlePos = to.middle(from);
             final Man middleMan = getMan(middlePos);
             if(middleMan != null) {
+                if(middleMan.team == man.team) throw new EatSameTeam();
+                if(middleMan.type == Man.Type.king && man.type == Man.Type.man) throw new EatKing();
+
                 men.remove(middleMan);
             } else {
                 throw new TooLongDistance();
