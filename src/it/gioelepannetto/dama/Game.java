@@ -1,5 +1,7 @@
 package it.gioelepannetto.dama;
 
+import it.gioelepannetto.dama.errors.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,16 +38,19 @@ public class Game {
         return null;
     }
 
-    public void move(final Position from, final Position to) {
+    public void move(final Position from, final Position to) throws GameError {
         final Man man = getMan(from);
 
-        if(man == null) return;
+        if(man == null) throw new NoPlayerFound(from);
+
+        if(from == to) throw new SamePosition();
+
         // Can't move if there is someone at that position
-        if(getMan(to) != null) return;
+        if(getMan(to) != null) throw new PlayerAlreadyPresent();
 
         // Can't move if distance is more than 1
         final double distance = Math.sqrt(Math.pow(from.x - to.x, 2) + Math.pow(from.y - to.y, 2));
-        if(distance > 1) return;
+        if(distance > 1) throw new TooLongDistance();
 
 
         man.position = to;

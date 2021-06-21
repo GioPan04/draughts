@@ -1,5 +1,7 @@
 package it.gioelepannetto.dama;
 
+import it.gioelepannetto.dama.errors.GameError;
+
 import java.util.Scanner;
 
 public class Main {
@@ -16,7 +18,12 @@ public class Main {
             System.out.println("Position you want to move to:");
             final Position to = getPosFromUser(scanner);
 
-            game.move(from, to);
+            try {
+                game.move(from, to);
+            } catch (GameError error) {
+                System.out.println("You can't do that: " + error.detail);
+            }
+
         }
 
         scanner.close();
