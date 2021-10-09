@@ -2,12 +2,14 @@ package it.gioelepannetto.dama;
 
 import it.gioelepannetto.dama.errors.GameError;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 public class Main {
 
     public static void main(String[] args) {
-        final Scanner scanner = new Scanner(System.in);
+        startServer();
+        /*final Scanner scanner = new Scanner(System.in);
         Game game = Game.startNew();
 
         try {
@@ -37,7 +39,8 @@ public class Main {
 
         System.out.printf("%s team won!", game.winner());
 
-        scanner.close();
+        scanner.close();*/
+
 
     }
 
@@ -47,5 +50,22 @@ public class Main {
         System.out.print("Y: ");
         final int y = Integer.parseInt(scanner.nextLine());
         return new Position(x, y);
+    }
+
+    private static void startServer() {
+        try {
+            final GameServer server = new GameServer(5556);
+            server.start();
+
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                try {
+                    server.stop(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
